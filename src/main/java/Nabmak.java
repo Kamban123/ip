@@ -47,6 +47,44 @@ public class Nabmak {
                 System.out.println("Tuff this task not done :(");
                 System.out.println(task);
                 System.out.println(banner);
+            } else if (input.startsWith("todo ")) {
+                String desc = input.substring(5);
+                tasks[taskNum] = new ToDo(desc);
+                taskNum++;
+
+                System.out.println(banner);
+                System.out.println("Ok new task!");
+                System.out.println(tasks[taskNum - 1]);
+                System.out.println("Now got " + taskNum + " tasks.");
+                System.out.println(banner);
+            } else if (input.startsWith("deadline ")) {
+                String info = input.substring(9);
+                int mid = info.indexOf(" /by ");
+                String desc = info.substring(0, mid);
+                String deadline = info.substring(mid + 5);
+                tasks[taskNum] = new Deadline(desc, deadline);
+                taskNum++;
+
+                System.out.println(banner);
+                System.out.println("Ok new task!");
+                System.out.println(tasks[taskNum - 1]);
+                System.out.println("Now got " + taskNum + " tasks.");
+                System.out.println(banner);
+            } else if (input.startsWith("event ")) {
+                String info = input.substring(6);
+                int left = info.indexOf(" /from ");
+                int right =  info.indexOf(" /to ");
+                String desc = info.substring(0, left);
+                String start = info.substring(left + 7, right);
+                String end = info.substring(right + 4);
+                tasks[taskNum] = new Event(desc, start, end);
+                taskNum++;
+
+                System.out.println(banner);
+                System.out.println("Ok new task!");
+                System.out.println(tasks[taskNum - 1]);
+                System.out.println("Now got " + taskNum + " tasks.");
+                System.out.println(banner);
             } else {
 
                 tasks[taskNum] = new Task(input);
