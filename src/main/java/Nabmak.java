@@ -8,6 +8,8 @@ public class Nabmak {
         String greeting = "Whatchu want?";
         String bye = "BYE!";
 
+        String[] inputs = new String[100]; 
+        int inputnum = 0;
         Scanner sc = new Scanner(System.in);
         
         System.out.println(banner);
@@ -23,8 +25,17 @@ public class Nabmak {
                 System.out.println(bye);
                 break;
             }
+
+            if (input.equals("list")) {
+                for (int i = 0; i < inputnum; i++) {
+                    System.out.println((i+1) + ". " + inputs[i]);
+                }
+            }
+
+            inputs[inputnum] = input;
+            inputnum++;
             System.out.println(banner);
-            System.out.println(input);
+            System.out.println("added: " + input);
         }
         sc.close();
     }
