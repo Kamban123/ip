@@ -5,11 +5,11 @@ public class Nabmak {
         String banner = "________________________________________";
         String name = "Nabmak";
         String intro = "Yo im " + name + ".";
-        String greeting = "Whatchu want?";
+        String greeting = "Whatchu wanna do?";
         String bye = "BYE!";
 
-        String[] inputs = new String[100]; 
-        int inputnum = 0;
+        Task[] tasks = new Task[100]; 
+        int taskNum = 0;
         Scanner sc = new Scanner(System.in);
         
         System.out.println(banner);
@@ -24,18 +24,37 @@ public class Nabmak {
                 System.out.println(banner);
                 System.out.println(bye);
                 break;
-            }
-
-            if (input.equals("list")) {
-                for (int i = 0; i < inputnum; i++) {
-                    System.out.println((i+1) + ". " + inputs[i]);
+            } else if (input.equals("list")) {
+                System.out.println(banner);
+                System.out.println("Your TODOLIST");
+                for (int i = 0; i < taskNum; i++) {
+                    System.out.println((i+1) + ". " + tasks[i]);
                 }
-            }
+                System.out.println(banner);
+            } else if (input.startsWith("mark ")) {
+                int num = Integer.parseInt(input.substring(5));
+                Task task = tasks[num - 1];
+                task.markDone();
 
-            inputs[inputnum] = input;
-            inputnum++;
-            System.out.println(banner);
-            System.out.println("added: " + input);
+                System.out.println("Good that task is DONE");
+                System.out.println(task);
+                System.out.println(banner);
+            } else if (input.startsWith("unmark ")) {
+                int num = Integer.parseInt(input.substring(7));
+                Task task = tasks[num - 1];
+                task.markNotDone();
+
+                System.out.println("Tuff this task not done :(");
+                System.out.println(task);
+                System.out.println(banner);
+            } else {
+
+                tasks[taskNum] = new Task(input);
+                taskNum++;
+                System.out.println(banner);
+                System.out.println("added: " + input);
+                System.out.println(banner);
+            }
         }
         sc.close();
     }
