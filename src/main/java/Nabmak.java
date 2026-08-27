@@ -120,7 +120,8 @@ public class Nabmak {
         String greeting = "Whatchu wanna do?";
         String bye = "BYE!";
 
-        ArrayList<Task> tasks = new ArrayList<>();
+        Storage storage = new Storage("./data/nabmak.txt");
+        ArrayList<Task> tasks = storage.load();
         Scanner sc = new Scanner(System.in);
         
         System.out.println(banner);
@@ -155,6 +156,7 @@ public class Nabmak {
                 int num = Integer.parseInt(input.substring(5));
                 Task task = tasks.get(num - 1);
                 task.markDone();
+                storage.save(tasks);
 
                 System.out.println("Good that task is DONE");
                 System.out.println(task);
@@ -163,6 +165,7 @@ public class Nabmak {
                 int num = Integer.parseInt(input.substring(7));
                 Task task = tasks.get(num - 1);
                 task.markNotDone();
+                storage.save(tasks);
 
                 System.out.println("Tuff this task not done :(");
                 System.out.println(task);
@@ -170,6 +173,7 @@ public class Nabmak {
             } else if (input.startsWith("todo ")) {
                 String desc = input.substring(5);
                 tasks.add(new ToDo(desc));
+                storage.save(tasks);
 
                 System.out.println(banner);
                 System.out.println("Ok new task!");
@@ -182,6 +186,7 @@ public class Nabmak {
                 String desc = info.substring(0, mid);
                 String deadline = info.substring(mid + 5);
                 tasks.add(new Deadline(desc, deadline));
+                storage.save(tasks);
 
                 System.out.println(banner);
                 System.out.println("Ok new task!");
@@ -196,6 +201,7 @@ public class Nabmak {
                 String start = info.substring(left + 7, right);
                 String end = info.substring(right + 4);
                 tasks.add(new Event(desc, start, end));
+                storage.save(tasks);
 
                 System.out.println(banner);
                 System.out.println("Ok new task!");
@@ -205,6 +211,7 @@ public class Nabmak {
             } else if (input.startsWith("delete ")) {
                 int num = Integer.parseInt(input.substring(7));
                 Task deleted = tasks.remove(num - 1);
+                storage.save(tasks);
 
                 System.out.println(banner);
                 System.out.println("Noted. I've remove the task:");
