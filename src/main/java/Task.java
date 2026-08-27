@@ -19,6 +19,10 @@ public class Task {
         return isDone ? "[X]" : "[ ]";
     }
 
+    public String getDesc() {
+        return this.desc;
+    }
+
     @Override
     public String toString() {
         return this.getStatus() + " " + this.desc;
