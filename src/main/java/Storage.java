@@ -1,10 +1,16 @@
 import java.io.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Storage {
     private final String filePath;
+    private static final DateTimeFormatter DATE_FORMAT =
+        DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     public Storage(String filePath) {
         this.filePath = filePath;
@@ -39,11 +45,13 @@ public class Storage {
             return "T | " + done + " | " + task.getDesc();
         } else if (task instanceof Deadline) {
             Deadline deadline = (Deadline) task;
-            return "D | " + done + " | " + task.getDesc() + " | " + deadline.getDead();
+            return "D | " + done + " | " + task.getDesc() + " | " + 
+                deadline.getDead().format(DATE_FORMAT);
         } else if (task instanceof Event) {
             Event event = (Event) task;
-            return "E | " + done + " | " + task.getDesc() + " | " + event.getStart()
-                 + " | " + event.getEnd();
+            return "E | " + done + " | " + task.getDesc() 
+                + " | " + event.getStart().format(DATE_FORMAT)
+                + " | " + event.getEnd().format(DATE_FORMAT);
         }
 
         return "";
@@ -87,9 +95,15 @@ public class Storage {
         if (type.equals("T")) {
             task = new ToDo(desc);
         } else if (type.equals("D")) {
-            task = new Deadline(desc, data[3]);
+            String deadlineString = data[3];
+            LocalDateTime deadline = LocalDateTime.parse(deadlineString, DATE_FORMAT);
+            task = new Deadline(desc, deadline);
         } else if (type.equals("E")) {
-            task = new Event(desc, data[3], data[4]);
+            String startString = data[3];
+            String endString = data[4];
+            LocalDateTime start = LocalDateTime.parse(startString, DATE_FORMAT);
+            LocalDateTime end = LocalDateTime.parse(endString, DATE_FORMAT);
+            task = new Event(desc, start, end);
         } else {
             return null;
         }

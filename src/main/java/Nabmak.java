@@ -1,7 +1,13 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 public class Nabmak {
+    private static final DateTimeFormatter DATE_FORMAT = 
+        DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
     public static void execute(String input, int taskNum) throws NabmakException {
         if (input.equals("todo")) {
             throw new NabmakException("You need to say what task you wanna do.");
@@ -46,6 +52,12 @@ public class Nabmak {
             if (deadline.isEmpty()) {
                 throw new NabmakException("Deadline cant have empty end date");
             }
+
+            try {
+                LocalDateTime.parse(deadline, DATE_FORMAT);
+            } catch (DateTimeParseException e) {
+                throw new NabmakException("Deadline date must be 'dd-MM-yyyy HH:mm'.");
+            }
         } else if (input.startsWith("event ")) {
             String info = input.substring(6);
             int left = info.indexOf(" /from ");
@@ -73,9 +85,23 @@ public class Nabmak {
             if (start.isEmpty()) {
                 throw new NabmakException("Event cant have empty start date");
             }
+
+            try {
+                LocalDateTime.parse(start, DATE_FORMAT);
+            } catch (DateTimeParseException e) {
+                throw new NabmakException("Event start date must be 'dd-MM-yyyy HH:mm'.");
+            }
             String end = info.substring(right + 4);
             if (end.isEmpty()) {
                 throw new NabmakException("Event cant have empty end date");
+            }
+
+            end = info.substring(right + 5);
+
+            try {
+                LocalDateTime.parse(end, DATE_FORMAT);
+            } catch (DateTimeParseException e) {
+                throw new NabmakException("Event end date must be 'dd-MM-yyyy HH:mm'.");
             }
         } else if (input.equals("bye") || input.equals("list")) {
             
@@ -184,7 +210,9 @@ public class Nabmak {
                 String info = input.substring(9);
                 int mid = info.indexOf(" /by ");
                 String desc = info.substring(0, mid);
-                String deadline = info.substring(mid + 5);
+                String deadlineString = info.substring(mid + 5);
+                LocalDateTime deadline = LocalDateTime.parse(deadlineString, 
+                    DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
                 tasks.add(new Deadline(desc, deadline));
                 storage.save(tasks);
 
@@ -198,8 +226,12 @@ public class Nabmak {
                 int left = info.indexOf(" /from ");
                 int right =  info.indexOf(" /to ");
                 String desc = info.substring(0, left);
-                String start = info.substring(left + 7, right);
-                String end = info.substring(right + 4);
+                String startString = info.substring(left + 7, right);
+                String endString = info.substring(right + 5);
+                LocalDateTime start = LocalDateTime.parse(startString, 
+                    DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
+                LocalDateTime end = LocalDateTime.parse(endString, 
+                    DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
                 tasks.add(new Event(desc, start, end));
                 storage.save(tasks);
 
