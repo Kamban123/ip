@@ -1,3 +1,8 @@
+package nabmak.ui;
+
+import nabmak.task.Task;
+import nabmak.task.TaskList;
+
 public class Ui {
     private static final String BANNER = "________________________________________";
     private static final String INTRO = "Yo im Nabmak.";
@@ -34,13 +39,13 @@ public class Ui {
     public void showDone(Task task) {
         System.out.println("Good that task is DONE");
         System.out.println(task);
-        System.out.println(task);
+        System.out.println(BANNER);
     }
 
     public void showUndone(Task task) {
         System.out.println("Tuff this task not done :(");
         System.out.println(task);
-        System.out.println(task);
+        System.out.println(BANNER);
     }
 
     public void showAdded(Task task, int size) {

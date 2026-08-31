@@ -1,7 +1,9 @@
+package nabmak.task;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-class Deadline extends Task {
+public class Deadline extends Task {
     private LocalDateTime deadline;
     private static final DateTimeFormatter DATE_FORMAT = 
         DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");

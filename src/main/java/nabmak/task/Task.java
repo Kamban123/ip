@@ -1,3 +1,5 @@
+package nabmak.task;
+
 public class Task {
     private String desc;
     private boolean isDone;
