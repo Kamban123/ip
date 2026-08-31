@@ -15,18 +15,28 @@ import java.util.Scanner;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Creates and runs the Nabmak application.
+ * Handles user interaction, parsing and storage.
+ */
+
 public class Nabmak {
     private Ui ui;
     private Storage storage;
     private TaskList tasks;
 
+    /**
+     * Creates a Nabmak application and loads in saved tasks.
+     */
     public Nabmak() {
     	this.ui = new Ui();
     	this.storage = new Storage("./data/nabmak.txt");
     	this.tasks = new TaskList(storage.load());
     }
 
-    
+    /**
+     * Runs main command of application
+     */
     public void run() {
         Scanner sc = new Scanner(System.in);
         
@@ -99,11 +109,22 @@ public class Nabmak {
                 storage.save(tasks.getTasks());
 
                 ui.showDeleted(deleted, tasks.size());
+            } else if (input.startsWith("find ")) {
+                String keyword = input.substring(5);
+                TaskList matches = tasks.find(keyword);
+
+                ui.showFind(matches);
             }
+            
         }
         sc.close();
     }
 
+    /**
+     * Starts Nabmak application
+     *
+     * @param args Arguments supplied to application.
+     */
     public static void main(String[] args) {
         new Nabmak().run();
     }

@@ -63,4 +63,15 @@ public class Ui {
         System.out.println("Now got " + size + " tasks.");
         System.out.println(BANNER);
     }
+
+    public void showFind(TaskList matches) {
+        System.out.println(BANNER);
+        System.out.println("You looking for these?:");
+
+        for (int i = 0; i < matches.size(); i++) {
+            System.out.println((i + 1) + ". " + matches.get(i));
+        }
+
+        System.out.println(BANNER);
+    }
 }

@@ -16,15 +16,27 @@ import java.util.Scanner;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Handles loading and saving tasks from and to a storage file.
+ */
 public class Storage {
     private final String filePath;
     private static final DateTimeFormatter DATE_FORMAT =
         DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-
+    /**
+     * Creates file path for data to be stored.
+     *
+     * @param filePath path of file where tasks are stored
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
+    /**
+     * Saves list of tasks to storage file.
+     *
+     * @param tasks list of tasks being saved
+     */
     public void save(ArrayList<Task> tasks) {
         try {
             File file = new File(this.filePath);
@@ -47,6 +59,12 @@ public class Storage {
         }
     }
 
+    /**
+     * Converts task into String format to store in file.
+     *
+     * @param task task to convert
+     * @return string format of task
+     */
     private String taskToStr(Task task) {
         String done = task.getStatus().equals("[X]") ? "1" : "0";
 
@@ -65,7 +83,12 @@ public class Storage {
 
         return "";
     }
-
+    
+    /**
+     * Loads existing tasks into application.
+     *
+     * @return list of tasks loaded
+     */
     public ArrayList<Task> load() {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(this.filePath);
@@ -94,6 +117,12 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * Converts stored string into a Task object.
+     *
+     * @param str stored string
+     * @return task constructed from string
+     */
     private Task strToTask(String str) {
         String[] data = str.split(" \\| ");
         String type = data[0];
