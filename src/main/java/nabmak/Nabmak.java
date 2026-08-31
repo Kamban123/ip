@@ -1,3 +1,15 @@
+package nabmak;
+
+import nabmak.parser.NabmakException;
+import nabmak.parser.Parser;
+import nabmak.storage.Storage;
+import nabmak.task.Deadline;
+import nabmak.task.Event;
+import nabmak.task.Task;
+import nabmak.task.TaskList;
+import nabmak.task.ToDo;
+import nabmak.ui.Ui;
+
 import java.util.Scanner;
 
 import java.time.LocalDateTime;
