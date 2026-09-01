@@ -1,48 +1,28 @@
 package nabmak.storage;
 
-import nabmak.task.Task;
-import nabmak.task.ToDo;
-import nabmak.task.Deadline;
-import nabmak.task.Event;
-
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.FileNotFoundException;
-
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import nabmak.task.Deadline;
+import nabmak.task.Event;
+import nabmak.task.Task;
+import nabmak.task.ToDo;
 
 /**
-<<<<<<< HEAD
- * Handles loading tasks from and saving tasks to a storage file.
-=======
  * Handles loading and saving tasks from and to a storage file.
->>>>>>> branch-Level-9
  */
 public class Storage {
-    private final String filePath;
+
     private static final DateTimeFormatter DATE_FORMAT =
         DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-<<<<<<< HEAD
-    
-    /**
-     * Creates a Storage object that uses the specified file path.
-     *
-     * @param filePath path of the file
-     */    
-    public Storage(String filePath) {
-        this.filePath = filePath;
-    }
-    
-    /**
-     * Saves the given list of tasks to the storage file.
-     *
-     * @param tasks list of tasks to save
-=======
+    private final String filePath;
+
     /**
      * Creates file path for data to be stored.
      *
@@ -56,13 +36,12 @@ public class Storage {
      * Saves list of tasks to storage file.
      *
      * @param tasks list of tasks being saved
->>>>>>> branch-Level-9
      */
     public void save(ArrayList<Task> tasks) {
         try {
             File file = new File(this.filePath);
             File parent = file.getParentFile();
-            
+
             if (parent != null) {
                 parent.mkdirs();
             }
@@ -93,24 +72,20 @@ public class Storage {
             return "T | " + done + " | " + task.getDesc();
         } else if (task instanceof Deadline) {
             Deadline deadline = (Deadline) task;
-            return "D | " + done + " | " + task.getDesc() + " | " + 
-                deadline.getDead().format(DATE_FORMAT);
+            return "D | " + done + " | " + task.getDesc() + " | "
+                + deadline.getDead().format(DATE_FORMAT);
         } else if (task instanceof Event) {
             Event event = (Event) task;
-            return "E | " + done + " | " + task.getDesc() 
+            return "E | " + done + " | " + task.getDesc()
                 + " | " + event.getStart().format(DATE_FORMAT)
                 + " | " + event.getEnd().format(DATE_FORMAT);
         }
 
         return "";
     }
-    
+
     /**
-<<<<<<< HEAD
-     * Loads tasks from the storage file.
-=======
      * Loads existing tasks into application.
->>>>>>> branch-Level-9
      *
      * @return list of tasks loaded
      */
@@ -125,7 +100,7 @@ public class Storage {
         try {
             Scanner sc = new Scanner(file);
 
-            while(sc.hasNextLine()) {
+            while (sc.hasNextLine()) {
                 String line = sc.nextLine();
                 Task task = strToTask(line);
 

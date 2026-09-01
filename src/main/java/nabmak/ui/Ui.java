@@ -31,7 +31,7 @@ public class Ui {
     /**
      * Prints error message for invalid user input.
      *
-     * @param message error message 
+     * @param message error message
      */
     public void showError(String message) {
         System.out.println(BANNER);
@@ -49,7 +49,7 @@ public class Ui {
         System.out.println("Your TODOLIST");
 
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println((i+1) + ". " + tasks.get(i));
+            System.out.println((i + 1) + ". " + tasks.get(i));
         }
         System.out.println(BANNER);
     }
@@ -92,7 +92,7 @@ public class Ui {
     /**
      * Prints dialogue for deleting a task and number of tasks remaining in list.
      *
-     * @param task task being deleted
+     * @param deleted task being deleted
      * @param size number of tasks remaining in list
      */
     public void showDeleted(Task deleted, int size) {
@@ -103,6 +103,11 @@ public class Ui {
         System.out.println(BANNER);
     }
 
+    /**
+     * Prints dialogue for tasks which match user inputted keyword.
+     *
+     * @param matches list of tasks which match keyword
+     */
     public void showFind(TaskList matches) {
         System.out.println(BANNER);
         System.out.println("You looking for these?:");

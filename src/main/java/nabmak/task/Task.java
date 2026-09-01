@@ -10,7 +10,7 @@ public class Task {
     /**
      * Creates an undone task with a specified description.
      *
-     * @param desc description of task 
+     * @param desc description of task
      */
     public Task(String desc) {
         this.desc = desc;

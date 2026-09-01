@@ -3,7 +3,7 @@ package nabmak.task;
 import java.util.ArrayList;
 
 /**
- * Represents the list of tasks and handles requests related to tasks. 
+ * Represents the list of tasks and handles requests related to tasks.
  */
 public class TaskList {
     private ArrayList<Task> tasks;
@@ -64,6 +64,12 @@ public class TaskList {
         return tasks;
     }
 
+    /**
+     * Returns a list of all tasks containing specified keyword.
+     *
+     * @param keyword the keyword which the tasks contain
+     * @return tasks matching specified keyword
+     */
     public TaskList find(String keyword) {
         ArrayList<Task> matches = new ArrayList<>();
 

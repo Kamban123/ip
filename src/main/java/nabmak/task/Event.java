@@ -7,16 +7,16 @@ import java.time.format.DateTimeFormatter;
  * Represents an Event object with user specified parameters.
  */
 public class Event extends Task {
-    private LocalDateTime start;
-    private LocalDateTime end;
-    private static final DateTimeFormatter DATE_FORMAT = 
+    private static final DateTimeFormatter DATE_FORMAT =
         DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");
+    private LocalDateTime end;
+    private LocalDateTime start;
 
     /**
      * Creates an event based on user input.
      *
      * @param desc description of task
-     * @param start start date 
+     * @param start start date
      * @param end end date
      */
     public Event(String desc, LocalDateTime start, LocalDateTime end) {
@@ -49,8 +49,8 @@ public class Event extends Task {
      */
     @Override
     public String toString() {
-        return "[Event]" + super.toString() + " (from: " 
-            + start.format(DATE_FORMAT) + " to: " 
+        return "[Event]" + super.toString() + " (from: "
+            + start.format(DATE_FORMAT) + " to: "
             + end.format(DATE_FORMAT) + ")";
     }
 }
