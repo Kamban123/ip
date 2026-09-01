@@ -63,4 +63,16 @@ public class TaskList {
     public ArrayList<Task> getTasks() {
         return tasks;
     }
+
+    public TaskList find(String keyword) {
+        ArrayList<Task> matches = new ArrayList<>();
+
+        for (Task task : tasks) {
+            if (task.getDesc().contains(keyword)) {
+                matches.add(task);
+            }
+        }
+
+        return new TaskList(matches);
+    }
 }

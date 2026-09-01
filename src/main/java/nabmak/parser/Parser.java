@@ -5,11 +5,16 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 /**
+<<<<<<< HEAD
  * Parses and validates user commands entered into Nabmak.
+=======
+ * Parses and validates user commands.
+>>>>>>> branch-Level-9
  */
 public class Parser {
     private static final DateTimeFormatter DATE_FORMAT = 
             DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+<<<<<<< HEAD
     
     /**
      * Parses and validates a user command based on its expected format.
@@ -17,8 +22,19 @@ public class Parser {
      * @param input command entered by the user
      * @param taskNum number of tasks currently in the task list
      * @throws NabmakException if the command or its arguments are invalid
+=======
+    /**
+     * Parses and validates user commands.
+     *
+     * @param input user command
+     * @param taskNum number of tasks currently in task list
+     * @throws NabmakException if user command is invalid
+>>>>>>> branch-Level-9
      */
     public static void parse(String input, int taskNum) throws NabmakException {
+        if (input.equals("find")) {
+            throw new NabmakException("Find what?");
+        }
         if (input.equals("todo")) {
             throw new NabmakException("You need to say what task you wanna do.");
         }
@@ -126,11 +142,25 @@ public class Parser {
             checkTaskNum(input.substring(7), taskNum, 
                 "You cant delete something that doesnt exist");
 
+        } else if (input.startsWith("find ")) {
+            String keyword = input.substring(5);
+
+            if (keyword.isEmpty()) {
+                throw new NabmakException("Find what?");
+            }
         } else {
             throw new NabmakException("Idk whatchu mean. Input either a todo, deadline or event. Or mark, unmark, delete.");
         }
     }
 
+    /**
+     * Checks if given taks number is valid.
+     *
+     * @param input task number being checked
+     * @param taskNum number of tasks currently in task list
+     * @param error error message if input is invalid
+     * @throws NabmakException if input is invalid
+     */
     private static void checkTaskNum(String input, int taskNum, String error) 
         throws NabmakException {
 

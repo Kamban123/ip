@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Runs the Nabmak application.
- * Handles user interaction, command parsing, task management, and storage.
+ * Creates and runs the Nabmak application.
+ * Handles user interaction, parsing and storage.
  */
 public class Nabmak {
     private Ui ui;
@@ -25,7 +25,7 @@ public class Nabmak {
     private TaskList tasks;
 
     /**
-     * Creates a Nabmak application and loads previously saved tasks.
+     * Creates a Nabmak application and loads in saved tasks.
      */
     public Nabmak() {
     	this.ui = new Ui();
@@ -34,9 +34,8 @@ public class Nabmak {
     }
 
     /**
-     * Runs the main command of the application.
-     * Reads and processes user commands.
-     */    
+     * Runs main command of application
+     */
     public void run() {
         Scanner sc = new Scanner(System.in);
         
@@ -109,15 +108,21 @@ public class Nabmak {
                 storage.save(tasks.getTasks());
 
                 ui.showDeleted(deleted, tasks.size());
+            } else if (input.startsWith("find ")) {
+                String keyword = input.substring(5);
+                TaskList matches = tasks.find(keyword);
+
+                ui.showFind(matches);
             }
+            
         }
         sc.close();
     }
 
     /**
-     * Starts the Nabmak application.
+     * Starts Nabmak application
      *
-     * @param args commands supplied to application
+     * @param args arguments supplied to application.
      */
     public static void main(String[] args) {
         new Nabmak().run();
