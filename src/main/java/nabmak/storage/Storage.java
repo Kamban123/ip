@@ -16,15 +16,28 @@ import java.util.Scanner;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Handles loading tasks from and saving tasks to a storage file.
+ */
 public class Storage {
     private final String filePath;
     private static final DateTimeFormatter DATE_FORMAT =
         DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-
+    
+    /**
+     * Creates a Storage object that uses the specified file path.
+     *
+     * @param filePath path of the file
+     */    
     public Storage(String filePath) {
         this.filePath = filePath;
     }
-
+    
+    /**
+     * Saves the given list of tasks to the storage file.
+     *
+     * @param tasks list of tasks to save
+     */
     public void save(ArrayList<Task> tasks) {
         try {
             File file = new File(this.filePath);
@@ -65,7 +78,12 @@ public class Storage {
 
         return "";
     }
-
+    
+    /**
+     * Loads tasks from the storage file.
+     *
+     * @return list of tasks loaded
+     */
     public ArrayList<Task> load() {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(this.filePath);

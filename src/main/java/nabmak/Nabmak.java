@@ -15,18 +15,28 @@ import java.util.Scanner;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Runs the Nabmak application.
+ * Handles user interaction, command parsing, task management, and storage.
+ */
 public class Nabmak {
     private Ui ui;
     private Storage storage;
     private TaskList tasks;
 
+    /**
+     * Creates a Nabmak application and loads previously saved tasks.
+     */
     public Nabmak() {
     	this.ui = new Ui();
     	this.storage = new Storage("./data/nabmak.txt");
     	this.tasks = new TaskList(storage.load());
     }
 
-    
+    /**
+     * Runs the main command of the application.
+     * Reads and processes user commands.
+     */    
     public void run() {
         Scanner sc = new Scanner(System.in);
         
@@ -104,6 +114,11 @@ public class Nabmak {
         sc.close();
     }
 
+    /**
+     * Starts the Nabmak application.
+     *
+     * @param args commands supplied to application
+     */
     public static void main(String[] args) {
         new Nabmak().run();
     }

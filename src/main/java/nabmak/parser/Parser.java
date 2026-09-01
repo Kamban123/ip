@@ -4,10 +4,20 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+/**
+ * Parses and validates user commands entered into Nabmak.
+ */
 public class Parser {
     private static final DateTimeFormatter DATE_FORMAT = 
             DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-
+    
+    /**
+     * Parses and validates a user command based on its expected format.
+     *
+     * @param input command entered by the user
+     * @param taskNum number of tasks currently in the task list
+     * @throws NabmakException if the command or its arguments are invalid
+     */
     public static void parse(String input, int taskNum) throws NabmakException {
         if (input.equals("todo")) {
             throw new NabmakException("You need to say what task you wanna do.");
