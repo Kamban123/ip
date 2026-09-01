@@ -1,5 +1,9 @@
 package nabmak;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
+
 import nabmak.parser.NabmakException;
 import nabmak.parser.Parser;
 import nabmak.storage.Storage;
@@ -9,11 +13,6 @@ import nabmak.task.Task;
 import nabmak.task.TaskList;
 import nabmak.task.ToDo;
 import nabmak.ui.Ui;
-
-import java.util.Scanner;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Creates and runs the Nabmak application.
@@ -28,17 +27,18 @@ public class Nabmak {
      * Creates a Nabmak application and loads in saved tasks.
      */
     public Nabmak() {
-    	this.ui = new Ui();
-    	this.storage = new Storage("./data/nabmak.txt");
-    	this.tasks = new TaskList(storage.load());
+        this.ui = new Ui();
+        this.storage = new Storage("./data/nabmak.txt");
+        this.tasks = new TaskList(storage.load());
     }
 
     /**
-     * Runs main command of application
+     * Runs the main command loop of application.
+     * Reads and processes user commands until they exit.
      */
     public void run() {
         Scanner sc = new Scanner(System.in);
-        
+
         ui.showHi();
 
         while (true) {
@@ -50,7 +50,7 @@ public class Nabmak {
                 ui.showError(e.getMessage());
                 continue;
             }
-            
+
             if (input.equals("bye")) {
                 ui.showBye();
                 break;
@@ -81,7 +81,7 @@ public class Nabmak {
                 int mid = info.indexOf(" /by ");
                 String desc = info.substring(0, mid);
                 String deadlineString = info.substring(mid + 5);
-                LocalDateTime deadline = LocalDateTime.parse(deadlineString, 
+                LocalDateTime deadline = LocalDateTime.parse(deadlineString,
                     DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
                 tasks.add(new Deadline(desc, deadline));
                 storage.save(tasks.getTasks());
@@ -90,13 +90,13 @@ public class Nabmak {
             } else if (input.startsWith("event ")) {
                 String info = input.substring(6);
                 int left = info.indexOf(" /from ");
-                int right =  info.indexOf(" /to ");
+                int right = info.indexOf(" /to ");
                 String desc = info.substring(0, left);
                 String startString = info.substring(left + 7, right);
                 String endString = info.substring(right + 5);
-                LocalDateTime start = LocalDateTime.parse(startString, 
+                LocalDateTime start = LocalDateTime.parse(startString,
                     DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
-                LocalDateTime end = LocalDateTime.parse(endString, 
+                LocalDateTime end = LocalDateTime.parse(endString,
                     DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
                 tasks.add(new Event(desc, start, end));
                 storage.save(tasks.getTasks());
@@ -114,15 +114,14 @@ public class Nabmak {
 
                 ui.showFind(matches);
             }
-            
         }
         sc.close();
     }
 
     /**
-     * Starts Nabmak application
+     * Starts Nabmak application.
      *
-     * @param args arguments supplied to application.
+     * @param args arguments supplied to application
      */
     public static void main(String[] args) {
         new Nabmak().run();

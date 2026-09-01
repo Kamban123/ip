@@ -4,12 +4,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * 
+ *
  */
 public class Deadline extends Task {
-    private LocalDateTime deadline;
-    private static final DateTimeFormatter DATE_FORMAT = 
+    private static final DateTimeFormatter DATE_FORMAT =
         DateTimeFormatter.ofPattern("MMM dd yyyy HH:mm");
+    private LocalDateTime deadline;
 
     /**
      * Creates Deadline object.

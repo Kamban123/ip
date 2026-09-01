@@ -5,31 +5,18 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 /**
-<<<<<<< HEAD
- * Parses and validates user commands entered into Nabmak.
-=======
  * Parses and validates user commands.
->>>>>>> branch-Level-9
  */
 public class Parser {
-    private static final DateTimeFormatter DATE_FORMAT = 
+    private static final DateTimeFormatter DATE_FORMAT =
             DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-<<<<<<< HEAD
-    
-    /**
-     * Parses and validates a user command based on its expected format.
-     *
-     * @param input command entered by the user
-     * @param taskNum number of tasks currently in the task list
-     * @throws NabmakException if the command or its arguments are invalid
-=======
+
     /**
      * Parses and validates user commands.
      *
      * @param input user command
      * @param taskNum number of tasks currently in task list
      * @throws NabmakException if user command is invalid
->>>>>>> branch-Level-9
      */
     public static void parse(String input, int taskNum) throws NabmakException {
         if (input.equals("find")) {
@@ -96,7 +83,7 @@ public class Parser {
             if (left == -1) {
                 throw new NabmakException("Event must have a '<description> /from <date> /to <date>'.");
             }
-            int right =  info.indexOf(" /to ");
+            int right = info.indexOf(" /to ");
             if (right == -1) {
                 throw new NabmakException("Event must have a '<description> /from <date> /to <date>'.");
             }
@@ -130,16 +117,16 @@ public class Parser {
                 throw new NabmakException("Event end date must be 'dd-MM-yyyy HH:mm'.");
             }
         } else if (input.equals("bye") || input.equals("list")) {
-            
+
         } else if (input.startsWith("mark ")) {
             checkTaskNum(input.substring(5), taskNum, "You arent that busy");
-            
+
         } else if (input.startsWith("unmark ")) {
-            checkTaskNum(input.substring(7), taskNum, 
+            checkTaskNum(input.substring(7), taskNum,
                 "You are making yourself busier than needed");
-                
+
         } else if (input.startsWith("delete ")) {
-            checkTaskNum(input.substring(7), taskNum, 
+            checkTaskNum(input.substring(7), taskNum,
                 "You cant delete something that doesnt exist");
 
         } else if (input.startsWith("find ")) {
@@ -149,7 +136,8 @@ public class Parser {
                 throw new NabmakException("Find what?");
             }
         } else {
-            throw new NabmakException("Idk whatchu mean. Input either a todo, deadline or event. Or mark, unmark, delete.");
+            throw new NabmakException(
+                "Idk whatchu mean. Input either a todo, deadline or event. Or mark, unmark, delete.");
         }
     }
 
@@ -161,8 +149,8 @@ public class Parser {
      * @param error error message if input is invalid
      * @throws NabmakException if input is invalid
      */
-    private static void checkTaskNum(String input, int taskNum, String error) 
-        throws NabmakException {
+    private static void checkTaskNum(String input, int taskNum, String error)
+            throws NabmakException {
 
         int num;
 
@@ -174,6 +162,6 @@ public class Parser {
 
         if (num < 1 || num > taskNum) {
             throw new NabmakException(error);
-        }    
+        }
     }
 }
