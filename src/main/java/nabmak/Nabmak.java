@@ -32,6 +32,82 @@ public class Nabmak {
         this.tasks = new TaskList(storage.load());
     }
 
+    public String processCommand(String input) {
+        try {
+            Parser.parse(input, tasks.size());
+        } catch (NabmakException e) {
+            return "TOUGH! " + e.getMessage();
+        }
+
+        if (input.equals("bye")) {
+            return "BYE!";
+        } else if (input.equals("list")) {
+            StringBuilder output = new StringBuilder("Your TODOLIST\n");
+
+            for (int i = 0; i < tasks.size(); i++) {
+                 output.append(i + 1).append(". ").append(tasks.get(i)).append("\n");
+            }
+
+            return output.toString();
+        } else if (input.startsWith("mark ")) {
+            int num = Integer.parseInt(input.substring(5));
+            Task task = tasks.get(num - 1);
+            task.markDone();
+            storage.save(tasks.getTasks());
+
+            return "Good that task is DONE\n" + task.toString();
+        } else if (input.startsWith("unmark ")) {
+            int num = Integer.parseInt(input.substring(7));
+            Task task = tasks.get(num - 1);
+            task.markNotDone();
+            storage.save(tasks.getTasks());
+            return "Tuff this task not done :(\n" + task.toString();
+        } else if (input.startsWith("todo ")) {
+            tasks.add(new ToDo(input.substring(5)));
+            storage.save(tasks.getTasks());
+            return "Ok new task!\n" + tasks.get(tasks.size() - 1)
+                + "\nNow got " + tasks.size() + " tasks.";
+        } else if (input.startsWith("deadline ")) {
+            String info = input.substring(9);
+            int mid = info.indexOf(" /by ");
+            String desc = info.substring(0, mid);
+            LocalDateTime deadline = LocalDateTime.parse(info.substring(mid + 5),
+                DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
+            tasks.add(new Deadline(desc, deadline));
+            storage.save(tasks.getTasks());
+            return "Ok new task!\n" + tasks.get(tasks.size() - 1)
+                + "\nNow got " + tasks.size() + " tasks.";
+        } else if (input.startsWith("event ")) {
+            String info = input.substring(6);
+            int left = info.indexOf(" /from ");
+            int right = info.indexOf(" /to ");
+            String desc = info.substring(0, left);
+            LocalDateTime start = LocalDateTime.parse(info.substring(left + 7, right),
+                DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
+            LocalDateTime end = LocalDateTime.parse(info.substring(right + 5),
+                DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
+            tasks.add(new Event(desc, start, end));
+            storage.save(tasks.getTasks());
+            return "Ok new task!\n" + tasks.get(tasks.size() - 1)
+                + "\nNow got " + tasks.size() + " tasks.";
+        } else if (input.startsWith("delete ")) {
+            int num = Integer.parseInt(input.substring(7));
+            Task deleted = tasks.delete(num - 1);
+            storage.save(tasks.getTasks());
+            return "Noted. I've removed the task:\n" + deleted + "\nNow got " + tasks.size()
+                + " tasks.";
+        } else if (input.startsWith("find ")) {
+            TaskList matches = tasks.find(input.substring(5));
+            StringBuilder response = new StringBuilder("You looking for these?:\n");
+            for (int i = 0; i < matches.size(); i++) {
+                response.append(i + 1).append(". ").append(matches.get(i)).append("\n");
+            }
+            return response.toString();
+        }
+
+        return "";
+    }
+
     /**
      * Runs the main command loop of application.
      * Reads and processes user commands until they exit.
@@ -43,76 +119,10 @@ public class Nabmak {
 
         while (true) {
             String input = sc.nextLine();
-
-            try {
-                Parser.parse(input, tasks.size());
-            } catch (NabmakException e) {
-                ui.showError(e.getMessage());
-                continue;
-            }
+            System.out.println(processCommand(input));
 
             if (input.equals("bye")) {
-                ui.showBye();
                 break;
-            } else if (input.equals("list")) {
-                ui.showList(tasks);
-            } else if (input.startsWith("mark ")) {
-                int num = Integer.parseInt(input.substring(5));
-                Task task = tasks.get(num - 1);
-                task.markDone();
-                storage.save(tasks.getTasks());
-
-                ui.showDone(task);
-            } else if (input.startsWith("unmark ")) {
-                int num = Integer.parseInt(input.substring(7));
-                Task task = tasks.get(num - 1);
-                task.markNotDone();
-                storage.save(tasks.getTasks());
-
-                ui.showUndone(task);
-            } else if (input.startsWith("todo ")) {
-                String desc = input.substring(5);
-                tasks.add(new ToDo(desc));
-                storage.save(tasks.getTasks());
-
-                ui.showAdded(tasks.get(tasks.size() - 1), tasks.size());
-            } else if (input.startsWith("deadline ")) {
-                String info = input.substring(9);
-                int mid = info.indexOf(" /by ");
-                String desc = info.substring(0, mid);
-                String deadlineString = info.substring(mid + 5);
-                LocalDateTime deadline = LocalDateTime.parse(deadlineString,
-                    DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
-                tasks.add(new Deadline(desc, deadline));
-                storage.save(tasks.getTasks());
-
-                ui.showAdded(tasks.get(tasks.size() - 1), tasks.size());
-            } else if (input.startsWith("event ")) {
-                String info = input.substring(6);
-                int left = info.indexOf(" /from ");
-                int right = info.indexOf(" /to ");
-                String desc = info.substring(0, left);
-                String startString = info.substring(left + 7, right);
-                String endString = info.substring(right + 5);
-                LocalDateTime start = LocalDateTime.parse(startString,
-                    DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
-                LocalDateTime end = LocalDateTime.parse(endString,
-                    DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
-                tasks.add(new Event(desc, start, end));
-                storage.save(tasks.getTasks());
-
-                ui.showAdded(tasks.get(tasks.size() - 1), tasks.size());
-            } else if (input.startsWith("delete ")) {
-                int num = Integer.parseInt(input.substring(7));
-                Task deleted = tasks.delete(num - 1);
-                storage.save(tasks.getTasks());
-
-                ui.showDeleted(deleted, tasks.size());
-            } else if (input.startsWith("find ")) {
-                String keyword = input.substring(5);
-                TaskList matches = tasks.find(keyword);
-
-                ui.showFind(matches);
             }
         }
         sc.close();
