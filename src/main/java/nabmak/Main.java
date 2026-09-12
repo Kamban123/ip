@@ -10,10 +10,14 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+/**
+ * Provides the JavaFX graphical user interface for Nabmak.
+ * Users can enter commands and view Nabmak's responses.
+ */
 public class Main extends Application {
     private final Nabmak nabmak = new Nabmak();
     private final TextArea chatArea = new TextArea();
-    
+
     @Override
     public void start(Stage stage) {
         chatArea.setEditable(false);
