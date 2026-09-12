@@ -32,6 +32,12 @@ public class Nabmak {
         this.tasks = new TaskList(storage.load());
     }
 
+    /**
+     * Processes a single user command and returns Nabmak's response.
+     *
+     * @param input the command entered by the user
+     * @return response to the command
+     */
     public String processCommand(String input) {
         try {
             Parser.parse(input, tasks.size());
@@ -45,7 +51,7 @@ public class Nabmak {
             StringBuilder output = new StringBuilder("Your TODOLIST\n");
 
             for (int i = 0; i < tasks.size(); i++) {
-                 output.append(i + 1).append(". ").append(tasks.get(i)).append("\n");
+                output.append(i + 1).append(". ").append(tasks.get(i)).append("\n");
             }
 
             return output.toString();
