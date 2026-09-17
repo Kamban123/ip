@@ -1,4 +1,2 @@
 T | 0 | read book
-D | 0 | do book | 12-12-1212 12:12
-T | 0 | something
 T | 0 | finish GUI

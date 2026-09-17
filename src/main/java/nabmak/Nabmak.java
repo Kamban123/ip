@@ -19,9 +19,11 @@ import nabmak.ui.Ui;
  * Handles user interaction, parsing and storage.
  */
 public class Nabmak {
-    private Ui ui;
-    private Storage storage;
-    private TaskList tasks;
+    private static final DateTimeFormatter DATE_FORMAT =
+        DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+    private final Ui ui;
+    private final Storage storage;
+    private final TaskList tasks;
 
     /**
      * Creates a Nabmak application and loads in saved tasks.
@@ -30,6 +32,20 @@ public class Nabmak {
         this.ui = new Ui();
         this.storage = new Storage("./data/nabmak.txt");
         this.tasks = new TaskList(storage.load());
+    }
+
+    /**
+     * Adds a task to the task list, saves it, and returns the confirmation.
+     *
+     * @param task task to add
+     * @return confirmation message
+     */
+    private String addTask(Task task) {
+        tasks.add(task);
+        storage.save(tasks.getTasks());
+
+        return "Ok new task!\n" + task
+            + "\nNow got " + tasks.size() + " tasks.";
     }
 
     /**
@@ -69,33 +85,21 @@ public class Nabmak {
             storage.save(tasks.getTasks());
             return "Tuff this task not done :(\n" + task.toString();
         } else if (input.startsWith("todo ")) {
-            tasks.add(new ToDo(input.substring(5)));
-            storage.save(tasks.getTasks());
-            return "Ok new task!\n" + tasks.get(tasks.size() - 1)
-                + "\nNow got " + tasks.size() + " tasks.";
+            return addTask(new ToDo(input.substring(5)));
         } else if (input.startsWith("deadline ")) {
             String info = input.substring(9);
             int mid = info.indexOf(" /by ");
             String desc = info.substring(0, mid);
-            LocalDateTime deadline = LocalDateTime.parse(info.substring(mid + 5),
-                DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
-            tasks.add(new Deadline(desc, deadline));
-            storage.save(tasks.getTasks());
-            return "Ok new task!\n" + tasks.get(tasks.size() - 1)
-                + "\nNow got " + tasks.size() + " tasks.";
+            LocalDateTime deadline = LocalDateTime.parse(info.substring(mid + 5), DATE_FORMAT);
+            return addTask(new Deadline(desc, deadline));
         } else if (input.startsWith("event ")) {
             String info = input.substring(6);
             int left = info.indexOf(" /from ");
             int right = info.indexOf(" /to ");
             String desc = info.substring(0, left);
-            LocalDateTime start = LocalDateTime.parse(info.substring(left + 7, right),
-                DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
-            LocalDateTime end = LocalDateTime.parse(info.substring(right + 5),
-                DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"));
-            tasks.add(new Event(desc, start, end));
-            storage.save(tasks.getTasks());
-            return "Ok new task!\n" + tasks.get(tasks.size() - 1)
-                + "\nNow got " + tasks.size() + " tasks.";
+            LocalDateTime start = LocalDateTime.parse(info.substring(left + 7, right), DATE_FORMAT);
+            LocalDateTime end = LocalDateTime.parse(info.substring(right + 5), DATE_FORMAT);
+            return addTask(new Event(desc, start, end));
         } else if (input.startsWith("delete ")) {
             int num = Integer.parseInt(input.substring(7));
             Task deleted = tasks.delete(num - 1);
