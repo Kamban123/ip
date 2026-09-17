@@ -6,6 +6,9 @@ import java.util.Scanner;
 
 import nabmak.parser.NabmakException;
 import nabmak.parser.Parser;
+import nabmak.place.Place;
+import nabmak.place.PlaceList;
+import nabmak.storage.PlaceStorage;
 import nabmak.storage.Storage;
 import nabmak.task.Deadline;
 import nabmak.task.Event;
@@ -24,6 +27,8 @@ public class Nabmak {
     private final Ui ui;
     private final Storage storage;
     private final TaskList tasks;
+    private final PlaceList places;
+    private final PlaceStorage placeStorage;
 
     /**
      * Creates a Nabmak application and loads in saved tasks.
@@ -32,6 +37,8 @@ public class Nabmak {
         this.ui = new Ui();
         this.storage = new Storage("./data/nabmak.txt");
         this.tasks = new TaskList(storage.load());
+        this.placeStorage = new PlaceStorage("./data/places.txt");
+        this.places = new PlaceList(placeStorage.load());
     }
 
     /**
@@ -56,7 +63,7 @@ public class Nabmak {
      */
     public String processCommand(String input) {
         try {
-            Parser.parse(input, tasks.size());
+            Parser.parse(input, tasks.size(), places.size());
         } catch (NabmakException e) {
             return "TOUGH! " + e.getMessage();
         }
@@ -113,6 +120,30 @@ public class Nabmak {
                 response.append(i + 1).append(". ").append(matches.get(i)).append("\n");
             }
             return response.toString();
+        } else if (input.startsWith("place add ")) {
+            String info = input.substring(10);
+            int mid = info.indexOf(" /details ");
+            String name = info.substring(0, mid);
+            String details = info.substring(mid + 10);
+            Place place = new Place(name, details);
+            places.add(place);
+            placeStorage.save(places.getPlaces());
+            return "Ok new place!\n" + place
+                + "\nNow got " + places.size() + " places.";
+        } else if (input.startsWith("place delete ")) {
+            int num = Integer.parseInt(input.substring(13));
+            Place deleted = places.delete(num - 1);
+            placeStorage.save(places.getPlaces());
+            return "Noted. I've removed the place:\n" + deleted + "\nNow got " + places.size()
+                + " places.";
+        } else if (input.equals("place list")) {
+            StringBuilder output = new StringBuilder("Your PLACES\n");
+
+            for (int i = 0; i < places.size(); i++) {
+                output.append(i + 1).append(". ").append(places.get(i)).append("\n");
+            }
+
+            return output.toString();
         }
 
         return "";

@@ -18,7 +18,7 @@ public class Parser {
      * @param taskNum number of tasks currently in task list
      * @throws NabmakException if user command is invalid
      */
-    public static void parse(String input, int taskNum) throws NabmakException {
+    public static void parse(String input, int taskNum, int placeNum) throws NabmakException {
         if (input.equals("find")) {
             throw new NabmakException("Find what?");
         }
@@ -39,6 +39,9 @@ public class Parser {
         }
         if (input.equals("delete")) {
             throw new NabmakException("delete which task?");
+        }
+        if (input.equals("place")) {
+            throw new NabmakException("what place?");
         }
         if (input.startsWith("todo ")) {
             String desc = input.substring(5);
@@ -135,6 +138,18 @@ public class Parser {
             if (keyword.isEmpty()) {
                 throw new NabmakException("Find what?");
             }
+        } else if (input.startsWith("place ")) {
+            String info = input.substring(6);
+
+            if (info.equals("list")) {
+
+            } else if (info.startsWith("delete ")) {
+                checkPlaceNum(info.substring(7), placeNum, "You dont have that many places");
+            } else if (info.startsWith("add ")) {
+                valideatePlaceAdd(info.substring(4));
+            } else {
+                throw new NabmakException("Use place add, place list or place delete.");
+            }
         } else {
             throw new NabmakException(
                 "Idk whatchu mean. Input either a todo, deadline or event. Or mark, unmark, delete.");
@@ -162,6 +177,54 @@ public class Parser {
 
         if (num < 1 || num > taskNum) {
             throw new NabmakException(error);
+        }
+    }
+
+    /**
+     * Checks if given place number is valid.
+     *
+     * @param input place number being checked
+     * @param placeNum number of places currently in place list
+     * @param error error message if input is invalid
+     * @throws NabmakException if input is invalid
+     */
+    private static void checkPlaceNum(String input, int placeNum, String error)
+            throws NabmakException {
+
+        int num;
+
+        try {
+            num = Integer.parseInt(input.trim());
+        } catch (NumberFormatException e) {
+            throw new NabmakException("Give valid place number");
+        }
+
+        if (num < 1 || num > placeNum) {
+            throw new NabmakException(error);
+        }
+    }
+
+    /**
+     * Validates the input for adding a place.
+     *
+     * @param input input for adding a place
+     * @throws NabmakException if input is invalid
+     */
+    private static void valideatePlaceAdd(String input) throws NabmakException {
+        int mid = input.indexOf(" /details ");
+
+        if (mid == -1) {
+            throw new NabmakException("Place must have a '<name> /details <details>'.");
+        }
+
+        String name = input.substring(0, mid);
+        String details = input.substring(mid + 10);
+
+        if (name.isEmpty()) {
+            throw new NabmakException("Place cant have empty name");
+        }
+        if (details.isEmpty()) {
+            throw new NabmakException("Place cant have empty details");
         }
     }
 }
