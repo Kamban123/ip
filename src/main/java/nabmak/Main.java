@@ -8,6 +8,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 /**
@@ -22,12 +23,14 @@ public class Main extends Application {
     public void start(Stage stage) {
         chatArea.setEditable(false);
         chatArea.setWrapText(true);
-        chatArea.appendText("Yo im Nabmak.\nWhatchu wanna do?\n\n");
+        chatArea.appendText("Nabmak: Yo im Nabmak.\n");
+        chatArea.appendText("Whatchu wanna do?\n\n");
 
         TextField inputField = new TextField();
         inputField.setPromptText("Enter a command...");
 
         Button sendButton = new Button("Send");
+        sendButton.setDefaultButton(true);
 
         Runnable sendCommand = () -> {
             String input = inputField.getText().trim();
@@ -36,8 +39,14 @@ public class Main extends Application {
             }
 
             String response = nabmak.processCommand(input);
-            chatArea.appendText("> " + input + "\n");
-            chatArea.appendText(response + "\n\n");
+            chatArea.appendText("You: " + input + "\n");
+
+            if (response.startsWith("TOUGH!")) {
+                chatArea.appendText("⚠ ERROR: " + response + "\n\n");
+            } else {
+                chatArea.appendText("Nabmak: " + response + "\n\n");
+            }
+
             inputField.clear();
 
             if (input.equals("bye")) {
@@ -50,14 +59,19 @@ public class Main extends Application {
 
         HBox inputArea = new HBox(10, inputField, sendButton);
         inputArea.setPadding(new Insets(10));
+        HBox.setHgrow(inputField, Priority.ALWAYS);
 
         BorderPane root = new BorderPane();
         root.setCenter(chatArea);
         root.setBottom(inputArea);
+        root.setPadding(new Insets(10));
 
         Scene scene = new Scene(root, 600, 400);
         stage.setTitle("Nabmak");
         stage.setScene(scene);
+        stage.setResizable(true);
+        stage.setMinWidth(400);
+        stage.setMinHeight(300);
         stage.show();
     }
 }
