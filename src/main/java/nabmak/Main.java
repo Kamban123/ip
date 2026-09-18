@@ -23,14 +23,26 @@ public class Main extends Application {
     public void start(Stage stage) {
         chatArea.setEditable(false);
         chatArea.setWrapText(true);
+        chatArea.setStyle("-fx-control-inner-background: #1e1e1e;"
+                + "-fx-font-family: 'Papyrus';"
+                + "-fx-font-size: 14px;"
+                + "-fx-text-fill: #f5f5f5;");
         chatArea.appendText("Nabmak: Yo im Nabmak.\n");
         chatArea.appendText("Whatchu wanna do?\n\n");
 
         TextField inputField = new TextField();
         inputField.setPromptText("Enter a command...");
+        inputField.setStyle("-fx-background-color: #2a2a2a;"
+                + "-fx-font-family: 'Consolas';"
+                + "-fx-font-size: 14px;"
+                + "-fx-text-fill: #f5f5f5;"
+                + "-fx-prompt-text-fill: #999999;");
 
         Button sendButton = new Button("Send");
         sendButton.setDefaultButton(true);
+        sendButton.setStyle("-fx-background-color: #f5a623;"
+                + "-fx-text-fill: #1e1e1e;"
+                + "-fx-font-weight: bold;");
 
         Runnable sendCommand = () -> {
             String input = inputField.getText().trim();
@@ -65,6 +77,7 @@ public class Main extends Application {
         root.setCenter(chatArea);
         root.setBottom(inputArea);
         root.setPadding(new Insets(10));
+        root.setStyle("-fx-background-color: #520d41;");
 
         Scene scene = new Scene(root, 600, 400);
         stage.setTitle("Nabmak");
